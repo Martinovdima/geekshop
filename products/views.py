@@ -5,46 +5,46 @@ from django.shortcuts import render
 
 def index(request):
     content = {
-        'title': 'GeekShop',
+        'title': 'geekShop',
     }
     return render(request, 'products/index.html', content)
 
 
 def products(request):
     links_menu = [
-        {'href': 'products', 'name': 'Новинки'},
-        {'href': 'products', 'name': 'Одежда'},
-        {'href': 'products', 'name': 'Обувь'},
-        {'href': 'products', 'name': 'Аксессуары'},
-        {'href': 'products', 'name': 'Подарки'},
+        {'href': 'products', 'name': 'новинки'},
+        {'href': 'products', 'name': 'одежда'},
+        {'href': 'products', 'name': 'обувь'},
+        {'href': 'products', 'name': 'аксессуары'},
+        {'href': 'products', 'name': 'подарки'},
     ]
     products = [
-        {'name': 'Худи черного цвета с монограммами adidas Originals',
+        {'name': 'худи черного цвета с монограммами adidas Originals',
          'price': '6 090,00',
          'description': 'Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.',
          'image': 'vendor/img/products/Adidas-hoodie.png'
          },
-        {'name': 'Синяя куртка The North Face',
+        {'name': 'синяя куртка The North Face',
          'price': '23 725,00',
          'description': 'Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.',
          'image': 'vendor/img/products/Blue-jacket-The-North-Face.png'
          },
-        {'name': 'Коричневый спортивный oversized-топ ASOS DESIGN',
+        {'name': 'коричневый спортивный oversized-топ ASOS DESIGN',
          'price': '3 390,00',
          'description': 'Материал с плюшевой текстурой. Удобный и мягкий.',
          'image': 'vendor/img/products/Brown-sports-oversized-top-ASOS-DESIGN.png'
          },
-        {'name': 'Черный рюкзак Nike Heritage',
+        {'name': 'черный рюкзак Nike Heritage',
          'price': '2 340,00',
          'description': 'Плотная ткань. Легкий материал.',
          'image': 'vendor/img/products/Black-Nike-Heritage-backpack.png'
          },
-        {'name': 'Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex',
+        {'name': 'черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex',
          'price': '13 590,00',
          'description': 'Гладкий кожаный верх. Натуральный материал.',
          'image': 'vendor/img/products/Black-Dr-Martens-shoes.png'
          },
-        {'name': 'Темно-синие широкие строгие брюки ASOS DESIGN',
+        {'name': 'чемно-синие широкие строгие брюки ASOS DESIGN',
          'price': '2890,00',
          'description': 'Легкая эластичная ткань сирсакер Фактурная ткань.',
          'image': 'vendor/img/products/Dark-blue-wide-leg-ASOs-DESIGN-trousers.png'
@@ -52,8 +52,9 @@ def products(request):
 
     ]
     content = {
+        'date': '2020',
         'products': products,
         'links_menu': links_menu,
-        'title': 'GeekShop - Каталог',
+        'title': 'geekShop - каталог',
     }
     return render(request, 'products/products.html', content)

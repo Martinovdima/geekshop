@@ -16,7 +16,7 @@
             <h1 class="my-4">GeekShop</h1>
             <div class="list-group">
                 {% for link_item in links_menu %}
-                <a href="{% url link_item.href %}" class="list-group-item">{{ link_item.name }}</a>
+                <a href="{% url link_item.href %}" class="list-group-item">{{ link_item.name|title }}</a>
                 {% endfor %}
             </div>
 
@@ -67,7 +67,7 @@
                         </a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a href="#">{{ product.name }}</a>
+                                <a href="#">{{ product.name|title }}</a>
                             </h4>
                             <h5>{{ product.price }} руб.</h5>
                             <p class="card-text">{{ product.description }}</p>
@@ -104,7 +104,7 @@
 {% block footer %}
     <footer class="py-5 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
+        <p class="m-0 text-center text-white">Copyright &copy; GeekShop {% now 'Y'%}</p>
     </div>
     <!-- /.container -->
     </footer>
