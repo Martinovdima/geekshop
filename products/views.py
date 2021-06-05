@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import os
 import json
+from products.models import ProductCategory, Product
 
 
 
@@ -13,19 +14,13 @@ def index(request):
 
 
 def products(request):
-    links_menu = [
-        {'href': 'products', 'name': 'новинки'},
-        {'href': 'products', 'name': 'одежда'},
-        {'href': 'products', 'name': 'обувь'},
-        {'href': 'products', 'name': 'аксессуары'},
-        {'href': 'products', 'name': 'подарки'},
-    ]
+    links_menu = ProductCategory.objects.all()
+    products = Product.objects.all()
+
     content = {
-        'date': '2020',
         'links_menu': links_menu,
         'title': 'geekShop - каталог',
+        'products': products,
     }
-    file_path = os.path.join(MODULE_DIR, 'fixtures/goods.json')
-    content['products'] = json.load(open(file_path, encoding='utf-8'))
 
     return render(request, 'products/products.html', content)

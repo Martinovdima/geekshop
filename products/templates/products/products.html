@@ -16,7 +16,7 @@
             <h1 class="my-4">GeekShop</h1>
             <div class="list-group">
                 {% for link_item in links_menu %}
-                <a href="{% url link_item.href %}" class="list-group-item">{{ link_item.name|title }}</a>
+                <a href="#" class="list-group-item">{{ link_item.name|title }}</a>
                 {% endfor %}
             </div>
 
@@ -62,7 +62,7 @@
                     <div class="card h-100">
                         <a href="#">
                             <img class="card-img-top"
-                                 src="{% static product.image %}"
+                                 src="/media/{{ product.image }}"
                                  alt="">
                         </a>
                         <div class="card-body">
