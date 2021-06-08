@@ -40,9 +40,8 @@ def profile(request):
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Успешно!')
             return HttpResponseRedirect(reverse('users:profile'))
-        else:
-            print(form.errors)
     else:
         form = UserProfileForm(instance=request.user)
     content = {'title': 'Geekshop - Личный кабинет','form': form}
