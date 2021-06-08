@@ -36,7 +36,15 @@ def register(request):
     return render(request, 'users/register.html', content)
 
 def profile(request):
-    form = UserProfileForm(instance=request.user)
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+        else:
+            print(form.errors)
+    else:
+        form = UserProfileForm(instance=request.user)
     content = {'title': 'Geekshop - Личный кабинет','form': form}
     return render(request, 'users/profile.html', content)
 
