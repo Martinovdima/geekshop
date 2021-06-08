@@ -19,12 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from products.views import index, products
+from users.views import login, register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
-    path('products/', products, name='products'),
     path('products/', include('products.urls', namespace='products')),
+    path('users/', include('users.urls', namespace='users')),
 ]
 
 if settings.DEBUG:
