@@ -48,7 +48,7 @@ def profile(request):
     else:
         form = UserProfileForm(instance=user)
 
-    total_quantity = -1
+    total_quantity = 0
     total_sum = 0
 
     baskets = Basket.objects.filter(user=user)
