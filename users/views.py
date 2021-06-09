@@ -3,6 +3,8 @@ from django.contrib import auth, messages
 from django.urls import reverse
 
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from basket.models import Basket
+
 
 # Create your views here.
 
@@ -36,15 +38,20 @@ def register(request):
     return render(request, 'users/register.html', content)
 
 def profile(request):
+    user = request.user
     if request.method == 'POST':
-        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Успешно!')
             return HttpResponseRedirect(reverse('users:profile'))
     else:
-        form = UserProfileForm(instance=request.user)
-    content = {'title': 'Geekshop - Личный кабинет','form': form}
+        form = UserProfileForm(instance=user)
+    content = {
+        'title': 'Geekshop - Личный кабинет',
+        'form': form,
+        'basket': Basket.objects.filter(user=user),
+    }
     return render(request, 'users/profile.html', content)
 
 
