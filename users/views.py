@@ -1,8 +1,10 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.urls import reverse
 
-from users.forms import UserLoginForm, UserRegisterForm
+from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from basket.models import Basket
+
 
 # Create your views here.
 
@@ -16,8 +18,6 @@ def login(request):
             if user and user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
-        else:
-            print(form.errors)
     else:
         form = UserLoginForm()
     content= {'title': 'Geekshop - Авторизация', 'form': form}
@@ -29,14 +29,41 @@ def register(request):
         form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Вы успешно зарегистрировались!')
             return HttpResponseRedirect(reverse('users:login'))
-        else:
-            print(form.errors)
     else:
         form = UserRegisterForm()
     content = {'title': 'Geekshop - Регистрация', 'form': form}
 
     return render(request, 'users/register.html', content)
+
+def profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Успешно сохранено!')
+            return HttpResponseRedirect(reverse('users:profile'))
+    else:
+        form = UserProfileForm(instance=user)
+
+    total_quantity = 0
+    total_sum = 0
+
+    baskets = Basket.objects.filter(user=user)
+    for basket in baskets:
+        total_quantity += 1
+        total_sum += basket.product.price
+    content = {
+        'title': 'Geekshop - Личный кабинет',
+        'form': form,
+        'basket': Basket.objects.filter(user=user),
+        'total_quantity': total_quantity,
+        'total_sum': total_sum,
+    }
+    return render(request, 'users/profile.html', content)
+
 
 def logout(request):
     auth.logout(request)
