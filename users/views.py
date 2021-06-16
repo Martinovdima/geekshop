@@ -48,19 +48,11 @@ def profile(request):
     else:
         form = UserProfileForm(instance=user)
 
-    total_quantity = 0
-    total_sum = 0
 
-    baskets = Basket.objects.filter(user=user)
-    for basket in baskets:
-        total_quantity += 1
-        total_sum += basket.product.price
     content = {
         'title': 'Geekshop - Личный кабинет',
         'form': form,
         'basket': Basket.objects.filter(user=user),
-        'total_quantity': total_quantity,
-        'total_sum': total_sum,
     }
     return render(request, 'users/profile.html', content)
 
