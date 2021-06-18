@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from users.models import User
+from products.models import Product, ProductCategory
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
 from django.contrib.auth.decorators import user_passes_test
 
@@ -58,3 +59,14 @@ def admin_users_return(request, id):
     user.is_active = True
     user.save()
     return HttpResponseRedirect(reverse('admins:admin_users'))
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products(request):
+    content = {'title': 'Geekshop - Админ | Продукты', 'products': Product.objects.all()}
+    return render(request, 'admins/admin-products-read.html', content)
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_category(request):
+    content = {'title': 'Geekshop - Админ | Категории','products_category': ProductCategory.objects.all()}
+    return render(request, 'admins/admin-products-category-read.html', content)
