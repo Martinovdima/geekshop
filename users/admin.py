@@ -1,5 +1,8 @@
 from django.contrib import admin
 from users.models import User
-# Register your models here.
+from basket.admin import BasketAdmin
 
-admin.site.register(User)
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    inlines = (BasketAdmin,)
