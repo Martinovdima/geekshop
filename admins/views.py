@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from users.models import User
 from products.models import Product, ProductCategory
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryForm
 from django.contrib.auth.decorators import user_passes_test
 
 
@@ -70,3 +70,16 @@ def admin_products(request):
 def admin_products_category(request):
     content = {'title': 'Geekshop - Админ | Категории','products_category': ProductCategory.objects.all()}
     return render(request, 'admins/admin-products-category-read.html', content)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_category_create(request):
+    if request.method == 'POST':
+        form = ProductCategoryForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_products_category'))
+    else:
+        form = ProductCategoryForm()
+    content = {'title': 'Geekshop - Админ | Создание категории', 'form': form}
+    return render(request, 'admins/admin-products-category-create.html', content)
