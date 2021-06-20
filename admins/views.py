@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from users.models import User
 from products.models import Product, ProductCategory
-from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryForm
+from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm
 from django.contrib.auth.decorators import user_passes_test
 
 
@@ -75,12 +75,12 @@ def admin_products_category(request):
 @user_passes_test(lambda u: u.is_superuser)
 def admin_products_category_create(request):
     if request.method == 'POST':
-        form = ProductCategoryForm(data=request.POST)
+        form = ProductCategoryAdminForm(data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('admins:admin_products_category'))
     else:
-        form = ProductCategoryForm()
+        form = ProductCategoryAdminForm()
     content = {'title': 'Geekshop - Админ | Создание категории', 'form': form}
     return render(request, 'admins/admin-products-category-create.html', content)
 
@@ -89,12 +89,12 @@ def admin_products_category_create(request):
 def admin_products_category_update(request, id):
     selected_products_category = ProductCategory.objects.get(id=id)
     if request.method == 'POST':
-        form = ProductCategoryForm(data=request.POST, instance=selected_products_category)
+        form = ProductCategoryAdminForm(data=request.POST, instance=selected_products_category)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('admins:admin_products_category'))
     else:
-        form = ProductCategoryForm(instance=selected_products_category)
+        form = ProductCategoryAdminForm(instance=selected_products_category)
 
     content = {
         'title': 'Geekshop - Админ | Обновление категории',

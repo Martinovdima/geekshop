@@ -2,6 +2,7 @@ from django import forms
 
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
+from products.forms import ProductCategoryForm
 from products.models import ProductCategory
 
 
@@ -18,10 +19,7 @@ class UserAdminProfileForm(UserProfileForm):
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control py-4', 'readonly': False}))
 
 
-class ProductCategoryForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4', 'placeholder': 'Введите название категории'}))
-    description = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4', 'placeholder': 'Введите описание категории'}))
-
+class ProductCategoryAdminForm(ProductCategoryForm):
     class Meta:
         model = ProductCategory
         fields = ('name', 'description')
