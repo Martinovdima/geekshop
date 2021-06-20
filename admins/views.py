@@ -83,3 +83,29 @@ def admin_products_category_create(request):
         form = ProductCategoryForm()
     content = {'title': 'Geekshop - Админ | Создание категории', 'form': form}
     return render(request, 'admins/admin-products-category-create.html', content)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_category_update(request, id):
+    selected_products_category = ProductCategory.objects.get(id=id)
+    if request.method == 'POST':
+        form = ProductCategoryForm(data=request.POST, instance=selected_products_category)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admins:admin_products_category'))
+    else:
+        form = ProductCategoryForm(instance=selected_products_category)
+
+    content = {
+        'title': 'Geekshop - Админ | Обновление категории',
+        'form': form,
+        'selected_products_category': selected_products_category,
+    }
+    return render(request, 'admins/admin-products-category-update-delete.html', content)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_category_delete(request, id):
+    product_category =ProductCategory.objects.get(id=id)
+    product_category.delete()
+    return HttpResponseRedirect(reverse('admins:admin_products_category'))
