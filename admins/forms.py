@@ -2,8 +2,8 @@ from django import forms
 
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
-from products.forms import ProductCategoryForm
-from products.models import ProductCategory
+from products.forms import ProductCategoryForm, ProductForm
+from products.models import ProductCategory, Product
 
 
 class UserAdminRegisterForm(UserRegisterForm):
@@ -23,3 +23,8 @@ class ProductCategoryAdminForm(ProductCategoryForm):
     class Meta:
         model = ProductCategory
         fields = ('name', 'description')
+
+class ProductAdminForm(ProductForm):
+    class Meta:
+        model = Product
+        fields = ('name', 'description', 'image', 'price', 'quantity', 'category')
