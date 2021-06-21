@@ -13,14 +13,12 @@ def index(request):
     return render(request, 'products/index.html', content)
 
 
-def products(request):
-    links_menu = ProductCategory.objects.all()
-    products = Product.objects.all()
-
+def products(request, category_id=None):
     content = {
-        'links_menu': links_menu,
-        'title': 'geekShop - каталог',
-        'products': products,
+        'categories': ProductCategory.objects.all(),
+        'title': 'GeekShop - каталог',
     }
-
+    content.update({
+        'products': Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+    })
     return render(request, 'products/products.html', content)
