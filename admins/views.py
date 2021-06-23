@@ -6,6 +6,7 @@ from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCat
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.utils.decorators import method_decorator
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -26,6 +27,10 @@ class UserListView(ListView):
         context['title'] = 'Geekshop - Админ | Пользователи'
         return context
 
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserListView, self).dispatch(request, *args, **kwargs)
+
 
 class UserCreateView(CreateView):
     model = User
@@ -38,6 +43,9 @@ class UserCreateView(CreateView):
         context['title'] = 'Geekshop - Админ | Регистрация'
         return context
 
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserCreateView, self).dispatch(request, *args, **kwargs)
 
 class UserUpdateView(UpdateView):
     model = User
@@ -50,6 +58,9 @@ class UserUpdateView(UpdateView):
         context['title'] = 'Geekshop - Админ | Обновление пользователя'
         return context
 
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserUpdateView, self).dispatch(request, *args, **kwargs)
 
 class UserDeleteView(DeleteView):
     model = User
@@ -62,29 +73,39 @@ class UserDeleteView(DeleteView):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserDeleteView, self).dispatch(request, *args, **kwargs)
 
-#class UserReturnView(DeleteView):
-    #model = User
-    #template_name = 'admins/admin-users-update-delete.html'
-    #success_url = reverse_lazy('admins:admin_users')
+class UserReturnView(DeleteView):
+    model = User
+    template_name = 'admins/admin-users-update-delete.html'
+    success_url = reverse_lazy('admins:admin_users')
 
-    #def delete(self, request, *args, **kwargs):
-        #self.object = self.get_object()
-        #self.object.is_active = True
-        #self.object.save()
-        #return HttpResponseRedirect(self.get_success_url())
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_users_return(request, id):
-    user = User.objects.get(id=id)
-    user.is_active = True
-    user.save()
-    return HttpResponseRedirect(reverse('admins:admin_users'))
 
-@user_passes_test(lambda u: u.is_superuser)
-def admin_products_category(request):
-    content = {'title': 'Geekshop - Админ | Категории','products_category': ProductCategory.objects.all()}
-    return render(request, 'admins/admin-products-category-read.html', content)
+class ProducCategorytListView(ListView):
+    model = ProductCategory
+    template_name = 'admins/admin-products-category-read.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProducCategorytListView, self).get_context_data(**kwargs)
+        context['title'] = 'Geekshop - Админ | Категории'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProducCategorytListView, self).dispatch(request, *args, **kwargs)
+
+#@user_passes_test(lambda u: u.is_superuser)
+#def admin_products_category(request):
+    #content = {'title': 'Geekshop - Админ | Категории','products_category': ProductCategory.objects.all()}
+    #return render(request, 'admins/admin-products-category-read.html', content)
 
 
 @user_passes_test(lambda u: u.is_superuser)
