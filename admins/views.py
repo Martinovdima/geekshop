@@ -21,17 +21,11 @@ class UserListView(ListView):
     model = User
     template_name = 'admins/admin-users-read.html'
 
-#@user_passes_test(lambda u: u.is_superuser)
-#def admin_users_create(request):#
-    #if request.method == 'POST':
-        #form = UserAdminRegisterForm(data=request.POST, files=request.FILES)
-        #if form.is_valid():
-            #form.save()
-            #return HttpResponseRedirect(reverse('admins:admin_users'))
-    #else:
-        #form = UserAdminRegisterForm()
-    #content = {'title': 'Geekshop - Админ | Регистрация', 'form': form}
-    #return render(request, 'admins/admin-users-create.html', content)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(UserListView, self).get_context_data(**kwargs)
+        context['title'] = 'Geekshop - Админ | Пользователи'
+        return context
+
 
 class UserCreateView(CreateView):
     model = User
@@ -39,23 +33,11 @@ class UserCreateView(CreateView):
     form_class = UserAdminRegisterForm
     success_url = reverse_lazy('admins:admin_users')
 
-#@user_passes_test(lambda u: u.is_superuser)
-#def admin_users_update(request, id):
-    #selected_user = User.objects.get(id=id)
-    #if request.method == 'POST':
-        #form = UserAdminProfileForm(data=request.POST, files=request.FILES, instance=selected_user)
-        #if form.is_valid():
-            #form.save()
-            #return HttpResponseRedirect(reverse('admins:admin_users'))
-    #else:
-        #form = UserAdminProfileForm(instance=selected_user)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(UserCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Geekshop - Админ | Регистрация'
+        return context
 
-    #content = {
-        #'title': 'Geekshop - Админ | Обновление пользователя',
-        #'form': form,
-        #'selected_user': selected_user,
-    #}
-    #return render(request, 'admins/admin-users-update-delete.html', content)
 
 class UserUpdateView(UpdateView):
     model = User
@@ -63,13 +45,11 @@ class UserUpdateView(UpdateView):
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admin_users')
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(UserUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Geekshop - Админ | Обновление пользователя'
+        return context
 
-#@user_passes_test(lambda u: u.is_superuser)
-#def admin_users_delete(request, id):
-    #user =User.objects.get(id=id)
-    #user.is_active = False
-    #user.save()
-    #return HttpResponseRedirect(reverse('admins:admin_users'))
 
 class UserDeleteView(DeleteView):
     model = User
