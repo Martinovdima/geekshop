@@ -18,9 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from products.views import index, products
-from users.views import login, register
-from basket.views import basket_add
+from products.views import index
 
 
 urlpatterns = [

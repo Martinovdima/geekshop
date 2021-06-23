@@ -1,28 +1,33 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.contrib.auth.views import LoginView
 
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 from basket.models import Basket
 
 
 # Create your views here.
+class UserLoginView(LoginView):
+    form_class = UserLoginForm
+    template_name = 'users/login.html'
 
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            if user and user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-    else:
-        form = UserLoginForm()
-    content= {'title': 'Geekshop - Авторизация', 'form': form}
 
-    return render(request, 'users/login.html', content)
+#def login(request):
+    #if request.method == 'POST':
+        #form = UserLoginForm(data=request.POST)
+        #if form.is_valid():
+            #username = request.POST['username']
+            #password = request.POST['password']
+            #user = auth.authenticate(username=username, password=password)
+            #if user and user.is_active:
+                #auth.login(request, user)
+                #return HttpResponseRedirect(reverse('index'))
+    #else:
+        #form = UserLoginForm()
+    #content= {'title': 'Geekshop - Авторизация', 'form': form}
+
+    #return render(request, 'users/login.html', content)
 
 def register(request):
     if request.method == 'POST':
