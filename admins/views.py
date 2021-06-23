@@ -76,12 +76,30 @@ class UserDeleteView(DeleteView):
     template_name = 'admins/admin-users-update-delete.html'
     success_url = reverse_lazy('admins:admin_users')
 
-#@user_passes_test(lambda u: u.is_superuser)
-#def admin_users_return(request, id):
-    #user = User.objects.get(id=id)
-    #user.is_active = True
-    #user.save()
-    #return HttpResponseRedirect(reverse('admins:admin_users'))
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+#class UserReturnView(DeleteView):
+    #model = User
+    #template_name = 'admins/admin-users-update-delete.html'
+    #success_url = reverse_lazy('admins:admin_users')
+
+    #def delete(self, request, *args, **kwargs):
+        #self.object = self.get_object()
+        #self.object.is_active = True
+        #self.object.save()
+        #return HttpResponseRedirect(self.get_success_url())
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_users_return(request, id):
+    user = User.objects.get(id=id)
+    user.is_active = True
+    user.save()
+    return HttpResponseRedirect(reverse('admins:admin_users'))
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_products_category(request):
