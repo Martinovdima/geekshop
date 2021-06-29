@@ -1,27 +1,31 @@
-from django.shortcuts import render
-import os
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
 
-from products.models import ProductCategory, Product
+from common.views import CommonContextMixin
+from products.models import Product, ProductCategory
 
 
-MODULE_DIR = os.path.dirname(__file__)
+class IndexView(CommonContextMixin, TemplateView):
+    template_name = 'products/index.html'
+    title = 'GeekShop'
 
-def index(request):
-    content = {'title': 'geekShop'}
-    return render(request, 'products/index.html', content)
 
-class ProductView(ListView):
+class ProductsListView(CommonContextMixin, ListView):
     model = Product
     template_name = 'products/products.html'
     paginate_by = 3
+    title = 'GeekShop - Каталог'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ProductView, self).get_context_data(**kwargs)
-        context['title'] = 'Geekshop | Продукты'
-        context['category'] = ProductCategory.objects.all()
+    def get_queryset(self):
+        queryset = super(ProductsListView, self).get_queryset()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category_id=category_id) if category_id else queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context['categories'] = ProductCategory.objects.all()
         return context
+
 
 #def products(request, category_id=None, page=1):
     #content = {'categories': ProductCategory.objects.all(),'title': 'GeekShop - каталог',}
