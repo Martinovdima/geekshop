@@ -1,17 +1,24 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from users.models import User
 from products.models import Product, ProductCategory
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryAdminForm, ProductAdminForm
 from django.contrib.auth.decorators import user_passes_test
+from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
+from common.views import CommonContextMixin
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def index(request):
-    return render(request, 'admins/admin.html')
+
+
+class IndexView(CommonContextMixin, TemplateView):
+    template_name = 'admins/admin.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(IndexView, self).dispatch(request, *args, **kwargs)
 
 #USER
 
